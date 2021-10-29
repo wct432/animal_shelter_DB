@@ -1,2 +1,2 @@
 # animal_shelter_DB
-Files for animal shelter database. 
+Store code and other files for animal shelter database. 
