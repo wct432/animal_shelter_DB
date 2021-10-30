@@ -12,6 +12,7 @@ DROP TABLE IF EXISTS animals;
 DROP TABLE IF EXISTS staff;
 
 
+-- CREATE TABLES
 CREATE TABLE animals
         (animal_id smallint NOT NULL AUTO_INCREMENT PRIMARY KEY,
         animal_name varchar(20),
@@ -57,6 +58,7 @@ CREATE TABLE staff
         (staff_id smallint NOT NULL AUTO_INCREMENT PRIMARY KEY,
         first_name   varchar(20),
         last_name   varchar(20),
+        email varchar(30) UNIQUE,
         job_title varchar(50),
         salary mediumint,
         volunteer varchar(1)
@@ -94,7 +96,7 @@ CREATE TABLE staff_animal_care_schedule
 
 
 
-
+-- INSERT TEST DATA
 INSERT INTO animals(animal_name, breed, adoption_status, d_o_b)
         VALUES 
                 ('Kaya','black lab pit mix','adopted','2017-9-18'),
@@ -140,13 +142,13 @@ INSERT INTO animal_features(animal_id, fur_color, eye_color)
                 (5,'marbled','black');
 
 
-INSERT INTO staff(first_name,last_name,job_title,salary)
+INSERT INTO staff(first_name,last_name,email,job_title,salary)
         VALUES 
-                ('Robert', 'Smith', 'Head Veterinarian', 75000),
-                ('Tim', 'Lee', 'Assistant Veterinarian', 50000),
-                ('Rachael', 'Jones', 'None', 0),
-                ('Sarah', 'Davis', 'Secretary', 45000),
-                ('Sam', 'Brown', 'None', 0);
+                ('Robert', 'Smith','rsmith@gmail.com', 'Head Veterinarian', 75000),
+                ('Tim', 'Lee', 'tlvet@vets.com','Assistant Veterinarian', 50000),
+                ('Rachael', 'Jones','rachael123@yahoo.com', 'None', 0),
+                ('Sarah', 'Davis','sdavis@gmail.com', 'Secretary', 45000),
+                ('Sam', 'Brown','sambrown@yahoo.com', 'None', 0);
 
 
 INSERT INTO staff_log(staff_id, hours_worked, scheduled_date)
@@ -165,3 +167,66 @@ INSERT INTO staff_animal_care_schedule(staff_id, animal_id, activity, date_time,
             (3,1,'walk','2021-10-29 16:00:00',2),
             (2,4,'tooth cleaning','2021-11-12 15:15:00',1),
             (5,5,'walk','2021-11-18 9:00:00',1);
+
+
+
+-- DEFINE FUNCTION, VIEW, and PROCEDURE 
+
+
+-- This function returns the full name of an employee from their ID
+DROP FUNCTION IF EXISTS find_name;
+DELIMITER $$
+CREATE FUNCTION find_name(staff_id smallint) 
+RETURNS varchar(200)
+DETERMINISTIC
+BEGIN
+        return 
+        (SELECT 
+                CONCAT(first_name," ",last_name) 
+        FROM 
+                staff where staff_id = staff_id
+        LIMIT 1);
+        
+END $$
+DELIMITER ;
+
+
+
+-- Search for a dog with a specific fur color
+DROP PROCEDURE IF EXISTS find_color;
+DELIMITER $$
+CREATE PROCEDURE find_color
+(fur_color varchar(20))
+BEGIN
+        SELECT 
+                features.animal_id AS "Animal ID",
+                animal.animal_name AS "Name"
+        FROM
+                animal_features features
+        JOIN animals animal
+        ON features.animal_id = animal.animal_id
+        WHERE features.fur_color = fur_color;
+
+END $$
+DELIMITER ;
+
+
+
+
+-- This view shows the number of appointments an animal has along with their name
+DROP VIEW IF EXISTS number_of_appointments;
+CREATE VIEW number_of_appointments
+AS 
+SELECT 
+        schedule.animal_id AS "Animal ID",
+        COUNT(*) AS Count,
+        animal.animal_name AS "Name"
+FROM
+        staff_animal_care_schedule schedule
+JOIN animals animal
+ON
+        schedule.animal_id = animal.animal_id
+GROUP BY
+        schedule.animal_id;
+
+
