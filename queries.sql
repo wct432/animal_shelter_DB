@@ -4,7 +4,7 @@ USE animal_shelter;
 -- Select the id's of animals that have no behavioural or mental problems 
 SELECT  
         animal_id,
-        behavior_problems 
+        behavior_problems as Problems 
 FROM animal_behavior_history
 WHERE behavior_problems = 'None'
 UNION
@@ -37,9 +37,10 @@ SELECT
 FROM animal_features;
 
 
--- find staff who are not scheduled using left join
-SELECT staff.staff_id 
-FROM   staff staff
+-- find staff who are not scheduled 
+SELECT 
+        staff.staff_id AS "ID's of Unscheduled Staff"
+FROM    staff staff
 LEFT JOIN staff_animal_care_schedule schedule
 ON 
     staff.staff_id = schedule.staff_id
@@ -63,7 +64,7 @@ WHERE staff.staff_id IN (
     );
 
 
--- this query will select staff names and  of volunteers (their salary = 0)
+-- this query will select staff names  of volunteers (their salary = 0)
 SELECT  
         staff_id,
         last_name,

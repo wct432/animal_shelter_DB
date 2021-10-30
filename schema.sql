@@ -94,8 +94,6 @@ CREATE TABLE staff_animal_care_schedule
         );
 
 
-
-
 -- INSERT TEST DATA
 INSERT INTO animals(animal_name, breed, adoption_status, d_o_b)
         VALUES 
@@ -170,7 +168,6 @@ INSERT INTO staff_animal_care_schedule(staff_id, animal_id, activity, date_time,
             (5,5,'walk','2021-11-18 9:00:00',1);
 
 
-
 -- DEFINE FUNCTION, VIEW, and PROCEDURE 
 
 
@@ -187,13 +184,12 @@ BEGIN
         FROM 
                 staff where staff_id = staff_id
         LIMIT 1);
-        
 END $$
 DELIMITER ;
 
 
 
--- Procedure finds a dog with a specific fur color
+-- Procedure finds animals with a specific fur color
 DROP PROCEDURE IF EXISTS find_color;
 DELIMITER $$
 CREATE PROCEDURE find_color
@@ -207,11 +203,8 @@ BEGIN
         JOIN animals animal
         ON features.animal_id = animal.animal_id
         WHERE features.fur_color = fur_color;
-
 END $$
 DELIMITER ;
-
-
 
 
 -- This view shows the number of appointments an animal has along with their name
@@ -229,5 +222,3 @@ ON
         schedule.animal_id = animal.animal_id
 GROUP BY
         schedule.animal_id;
-
-
