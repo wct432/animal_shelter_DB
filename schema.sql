@@ -117,10 +117,10 @@ INSERT INTO animal_history(animal_id,vaccination_status)
 
 INSERT INTO animal_health_history(animal_id, health_problems)
         VALUES 
-                (1,'None, very healthy and energetic.'),
+                (1,'None'),
                 (2,'Suffers from stomach cramps. '),
                 (3,'Lethargic and has arthritis.'),
-                (4,'None, very healthy.'),
+                (4,'None'),
                 (5,'Propensity for rashes and irritated skin.');
 
 
@@ -129,7 +129,7 @@ INSERT INTO animal_behavior_history(animal_id, behavior_problems)
                 (1,'Very energetic and propensity to jump.'),
                 (2,'Very mellow and well natured.'),
                 (3,'Barks often, but is friendly.'),
-                (4,'Mellow and kind.'),
+                (4,'None'),
                 (5,'A bit hard to handle, needs space to roam.');
 
 
@@ -157,13 +157,14 @@ INSERT INTO staff_log(staff_id, hours_worked, scheduled_date)
             (2,8,'2021-10-17'),
             (3,4,'2021-10-12'),
             (4,7,'2021-10-7'),
+            (5,6,'2021-11-22'),
             (5,10,'2021-10-22');
 
 
 INSERT INTO staff_animal_care_schedule(staff_id, animal_id, activity, date_time, duration)
         VALUES
             (1,2,'checkup','2021-10-29 10:30:00',1),
-            (2,2,'nail trimming and checkup','2021-10-12 13:00:00',2),
+            (2,2,'nail trimming, cleaning, and checkup','2021-10-12 13:00:00',2),
             (3,1,'walk','2021-10-29 16:00:00',2),
             (2,4,'tooth cleaning','2021-11-12 15:15:00',1),
             (5,5,'walk','2021-11-18 9:00:00',1);
@@ -192,7 +193,7 @@ DELIMITER ;
 
 
 
--- Search for a dog with a specific fur color
+-- Procedure finds a dog with a specific fur color
 DROP PROCEDURE IF EXISTS find_color;
 DELIMITER $$
 CREATE PROCEDURE find_color
